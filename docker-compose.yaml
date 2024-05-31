@@ -283,10 +283,10 @@ services:
       image: redis:6.2.6
       container_name: nl-portal-redis-open-notificaties
 
-  backend:
+  portalbackend:
     build: 
       context: .
-      dockerfile: backend/Dockerfile
+      dockerfile: portalbackend/Dockerfile
     depends_on:
       - nl-portal-database
 
