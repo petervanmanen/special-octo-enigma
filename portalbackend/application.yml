@@ -74,13 +74,13 @@ logging:
 nl-portal:
     zgw:
         catalogiapi:
-            url: http://localhost:8001
+            url: http://nl-portal-openzaak:8000
             clientId: valtimo_client
             secret: e09b8bc5-5831-4618-ab28-41411304309d
             rsin: "051845623"
             documentTypeUrl: http://localhost:8001/catalogi/api/v1/informatieobjecttypen/efc332f2-be3b-4bad-9e3c-49a6219c92ad
         zakenapi:
-            url: http://localhost:8001
+            url: http://nl-portal-openzaak:8000
             clientId: valtimo_client
             secret: e09b8bc5-5831-4618-ab28-41411304309d
         taak:
@@ -94,13 +94,13 @@ nl-portal:
             default-document-api: openzaak
             configurations:
                 openzaak:
-                    url: http://localhost:8001/documenten/api/v1
+                    url: http://nl-portal-openzaak:8000/documenten/api/v1
                     clientId: valtimo_client
                     secret: e09b8bc5-5831-4618-ab28-41411304309d
                     rsin: "051845623"
-                    documentTypeUrl: http://localhost:8001/catalogi/api/v1/informatieobjecttypen/efc332f2-be3b-4bad-9e3c-49a6219c92ad
+                    documentTypeUrl: http://nl-portal-openzaak:8000/catalogi/api/v1/informatieobjecttypen/efc332f2-be3b-4bad-9e3c-49a6219c92ad
                 dummydoc:
-                    url: http://localhost:8002/documenten/api/v1
+                    url: http://nl-portal-openzaak:8000/documenten/api/v1
                     clientId: docdoc
                     secret: e09b8bc5-5831-4618-ab28-41411304309d
     openklant:
@@ -112,7 +112,7 @@ nl-portal:
         url: http://localhost:8003
         token: 3ca04f4c11159811877444fdb1e019b7eac13f78
     objectsapi:
-        url: http://localhost:8010
+        url: http://nl-portal-objecten-api:8000
         token: 182c13e2209161852c53cef53a879f7a2f923430
     #haalcentraal:
     #hr:
@@ -152,6 +152,6 @@ nl-portal:
                     title: Belastingzaken
                     shaInKey: de14f0e3-2ff0-45eb-95a6-1cdc35ca7a00
                     shaOutKey: de14f0e3-2ff0-45eb-95a6-1cdc35ca7a00
-                    failureUrl: http://localhost:3000
-                    successUrl: http://localhost:3000
+                    failureUrl: http://localhost:8005
+                    successUrl: http://localhost:8005
 

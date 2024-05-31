@@ -27,6 +27,8 @@ The following services will be started:
 | Objecttypen API | 8011 |
 | Objecttypen API database (postgres) | - |
 | Redis | - |
+| Portal frontend | 8005 |
+| Portal backend | 8004 | 
 
 ### Keycloak and database only
 Execute the following command: `docker compose up -d`

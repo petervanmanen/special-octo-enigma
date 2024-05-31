@@ -5,6 +5,7 @@ WORKDIR /home
 RUN git clone https://github.com/nl-portal/nl-portal-backend-libraries.git
 #Set working directory
 WORKDIR /home/nl-portal-backend-libraries
-ADD backend/application.yml /home/nl-portal-backend-libraries/app/src/main/resources/config/application.yml
+ADD portalbackend/application.yml /home/nl-portal-backend-libraries/app/src/main/resources/config/application.yml
 RUN chmod +x gradlew
+RUN ./gradlew app:build
 CMD ./gradlew app:bootRun -x test 

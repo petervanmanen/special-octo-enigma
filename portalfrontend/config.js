@@ -1,0 +1,13 @@
+window.KEYCLOAK_URL = 'http://localhost:8082/auth';
+window.KEYCLOAK_REALM = 'nlportal';
+window.KEYCLOAK_CLIENT_ID = 'nl-portal';
+window.KEYCLOAK_REDIRECT_URI = 'http://localhost:8005/keycloak/callback';
+window.GRAPHQL_URI = 'http://localhost:8004/graphql';
+window.REST_URI = 'http://localhost:8004/api';
+window.OPEN_FORMS_BASE_URL = 'http://localhost:8004/api/v1';
+window.OPEN_FORMS_FORM_ID = 'bezwaar\u002Dmaken';
+window.OPEN_FORMS_ENTRY_ENV = 'docker';
+window.OPEN_FORMS_SDK_URL = 'https://openformulieren-cg.test.denhaag.nl/static/sdk/oidc-digid/open-forms-sdk.js';
+window.OPEN_FORMS_STYLES_URL = 'https://openformulieren-cg.test.denhaag.nl/static/sdk/oidc-digid/open-forms-sdk.css';
+window.SHOW_INHABITANT_AMOUNT = 'true';
+window.ADDRESS_RESEARCH_URL = 'https://www.google.nl';

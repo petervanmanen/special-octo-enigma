@@ -287,8 +287,27 @@ services:
     build: 
       context: .
       dockerfile: portalbackend/Dockerfile
+    healthcheck:
+      test: "curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1"
+      interval: 2s
+      timeout: 3s
+      retries: 10
+      start_period: 2s
     depends_on:
       - nl-portal-database
+      - nl-portal-keycloak
+    ports:
+    - "8004:8090"
+
+  portalfrontend:
+    build: 
+      context: .
+      dockerfile: portalfrontend/Dockerfile
+    depends_on:
+      - nl-portal-keycloak
+      - portalbackend
+    ports:
+    - "8005:3000"
 
 volumes:
   nl-portal-database-data:
