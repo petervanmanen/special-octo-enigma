@@ -4,11 +4,12 @@ services:
 
   nl-portal-keycloak:
       container_name: nl-portal-keycloak
+      hostname: nlportal.local
       depends_on:
           - nl-portal-keycloak-database
       image: quay.io/keycloak/keycloak:24.0.1
       ports:
-          - "8082:8080"
+          - "8080:8080"
       environment:
           KEYCLOAK_ADMIN: admin
           KEYCLOAK_ADMIN_PASSWORD: admin
@@ -57,10 +58,10 @@ services:
           - DB_USER=openzaak
           - DB_PASSWORD=openzaak
           - DB_NAME=openzaak
-          - CACHE_DEFAULT=redis:6379/0
-          - CACHE_AXES=redis:6379/0
+          - CACHE_DEFAULT=nl-portal-redis:6379/0
+          - CACHE_AXES=nl-portal-redis:6379/0
           - DEBUG=true
-          - ALLOWED_HOSTS=localhost,host.docker.internal,172.17.0.1,openzaak
+          - ALLOWED_HOSTS=localhost,host.docker.internal,172.17.0.1,openzaak,nl-portal-openzaak
           - OPENZAAK_SUPERUSER_USERNAME=admin
           - OPENZAAK_SUPERUSER_EMAIL=admin@admin.org
           - DJANGO_SUPERUSER_PASSWORD=admin
@@ -98,8 +99,8 @@ services:
           - DB_USER=openklant
           - DB_PASSWORD=openklant
           - DB_NAME=openklant
-          - CACHE_DEFAULT=redis:6379/0
-          - CACHE_AXES=redis:6379/0
+          - CACHE_DEFAULT=nl-portal-redis:6379/0
+          - CACHE_AXES=nl-portal-redis:6379/0
           - ALLOWED_HOSTS=*
           - DJANGO_SETTINGS_MODULE=openklant.conf.docker
       ports:
@@ -254,9 +255,9 @@ services:
           - DB_PASSWORD=notifications
           - DEBUG=true
           - RABBITMQ_HOST=nl-portal-open-notificaties-rabbitmq
-          - PUBLISH_BROKER_URL=redis://nl-portal-redis-open-notificaties:6379/0
-          - CELERY_BROKER_URL=redis://nl-portal-redis-open-notificaties:6379/0
-          - CELERY_RESULT_BACKEND=redis://nl-portal-redis-open-notificaties:6379/0
+          - PUBLISH_BROKER_URL=nl-portal-redis://nl-portal-redis-open-notificaties:6379/0
+          - CELERY_BROKER_URL=nl-portal-redis://nl-portal-redis-open-notificaties:6379/0
+          - CELERY_RESULT_BACKEND=nl-portal-redis://nl-portal-redis-open-notificaties:6379/0
           - CELERY_LOGLEVEL=DEBUG
           - CELERY_WORKER_CONCURRENCY=${CELERY_WORKER_CONCURRENCY:-4}
 
@@ -283,29 +284,30 @@ services:
       image: redis:6.2.6
       container_name: nl-portal-redis-open-notificaties
 
-  portalbackend:
+  nl-portal-backendtemplate:
     build: 
       context: .
-      dockerfile: portalbackend/Dockerfile
+      dockerfile: portalbackendtemplate/Dockerfile
     healthcheck:
       test: "curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1"
       interval: 2s
       timeout: 3s
       retries: 10
       start_period: 2s
+    environment:
+      - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://nlportal.local:8082/auth/realms/nlportal
     depends_on:
       - nl-portal-database
-      - nl-portal-keycloak
     ports:
     - "8004:8090"
 
-  portalfrontend:
+  nl-portal-frontendtemplate:
     build: 
       context: .
-      dockerfile: portalfrontend/Dockerfile
+      dockerfile: portalfrontendtemplate/Dockerfile
     depends_on:
       - nl-portal-keycloak
-      - portalbackend
+      - nl-portal-backendtemplate
     ports:
     - "8005:3000"
 

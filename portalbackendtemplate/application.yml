@@ -17,12 +17,12 @@ spring:
     profiles:
         default: dev
     application:
-        name: nl-portal-backend-libraries
+        name: nl-portal-backend
     security:
         oauth2:
             resourceserver:
                 jwt:
-                    issuer-uri: http://nl-portal-keycloak:8080/auth/realms/nlportal
+                    issuer-uri: http://nlportal.local:8080/auth/realms/nlportal
     liquibase:
         enabled: false
     datasource:

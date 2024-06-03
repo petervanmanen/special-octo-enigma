@@ -1,4 +1,4 @@
-window.KEYCLOAK_URL = 'http://localhost:8082/auth';
+window.KEYCLOAK_URL = 'http://nlportal.local:8080/auth';
 window.KEYCLOAK_REALM = 'nlportal';
 window.KEYCLOAK_CLIENT_ID = 'nl-portal';
 window.KEYCLOAK_REDIRECT_URI = 'http://localhost:8005/keycloak/callback';
