@@ -1,0 +1,13 @@
+name: Build and Test Docker compose
+on:
+    push:
+        branches:
+            - '/**'
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Docker compose tests run
+              uses: cloudposse/github-action-docker-compose-test-run@0.2.0
+              with:
+                command: echo                      
