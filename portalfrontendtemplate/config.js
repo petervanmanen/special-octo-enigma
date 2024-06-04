@@ -1,7 +1,7 @@
-window.KEYCLOAK_URL = 'http://nlportal.local:8080/auth';
+window.KEYCLOAK_URL = 'http://keycloak.nlportal.local:8080/auth';
 window.KEYCLOAK_REALM = 'nlportal';
 window.KEYCLOAK_CLIENT_ID = 'nl-portal';
-window.KEYCLOAK_REDIRECT_URI = 'http://localhost:8005/keycloak/callback';
+window.KEYCLOAK_REDIRECT_URI = 'http://localhost:3000/keycloak/callback';
 window.GRAPHQL_URI = 'http://localhost:8004/graphql';
 window.REST_URI = 'http://localhost:8004/api';
 window.OPEN_FORMS_BASE_URL = 'http://localhost:8004/api/v1';

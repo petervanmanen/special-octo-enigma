@@ -4,7 +4,7 @@ services:
 
   nl-portal-keycloak:
       container_name: nl-portal-keycloak
-      hostname: nlportal.local
+      hostname: keycloak.nlportal.local
       depends_on:
           - nl-portal-keycloak-database
       image: quay.io/keycloak/keycloak:24.0.1
@@ -20,7 +20,7 @@ services:
           KC_FEATURES: token-exchange,admin-fine-grained-authz
           KC_HTTP_RELATIVE_PATH: /auth
       volumes:
-          - ./imports/keycloak:/opt/keycloak/data/import
+          - ./imports/keycloak-portal:/opt/keycloak/data/import
       command: "start-dev --import-realm"
 
   nl-portal-keycloak-database:
@@ -285,6 +285,7 @@ services:
       container_name: nl-portal-redis-open-notificaties
 
   nl-portal-backendtemplate:
+    
     build: 
       context: .
       dockerfile: portalbackendtemplate/Dockerfile
@@ -295,11 +296,15 @@ services:
       retries: 10
       start_period: 2s
     environment:
-      - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://nlportal.local:8082/auth/realms/nlportal
+      - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak.nlportal.local:8082/auth/realms/nlportal
     depends_on:
       - nl-portal-database
+    profiles:
+      - zgw
+      - portal
     ports:
     - "8004:8090"
+
 
   nl-portal-frontendtemplate:
     build: 
@@ -308,8 +313,106 @@ services:
     depends_on:
       - nl-portal-keycloak
       - nl-portal-backendtemplate
+    profiles:
+      - zgw
+      - portal
     ports:
-    - "8005:3000"
+    - "3000:3000"
 
+  gzac-frontendtemplate:
+    build: 
+      context: .
+      dockerfile: gzacfrontendtemplate/Dockerfile
+    depends_on:
+      - gzac-keycloak
+      - gzac-backendtemplate
+    profiles:
+      - zgw
+      - gzac
+    ports:
+    - "4200:4200"
+
+  gzac-backendtemplate:
+    hostname: gzac.local
+    build: 
+      context: .
+      dockerfile: gzacbackendtemplate/Dockerfile
+    healthcheck:
+      test: "curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1"
+      interval: 2s
+      timeout: 3s
+      retries: 10
+      start_period: 2s
+    profiles:
+      - zgw
+      - gzac
+    depends_on:
+      - gzac-database
+
+  gzac-keycloak:
+      container_name: gzac-keycloak
+      hostname: keycloak.gzac.local
+      depends_on:
+          - gzac-keycloak-database
+      image: quay.io/keycloak/keycloak:24.0.1
+      ports:
+          - "8081:8080"
+      environment:
+          KEYCLOAK_ADMIN: admin
+          KEYCLOAK_ADMIN_PASSWORD: admin
+          KC_DB: postgres
+          KC_DB_URL: jdbc:postgresql://gzac-keycloak-database/keycloak
+          KC_DB_USERNAME: keycloak
+          KC_DB_PASSWORD: keycloak
+          KC_FEATURES: token-exchange,admin-fine-grained-authz
+          KC_HTTP_RELATIVE_PATH: /auth
+      volumes:
+          - ./imports/keycloak-gzac:/opt/keycloak/data/import
+      profiles:
+        - zgw
+        - gzac
+      command: "start-dev --import-realm"
+
+
+  gzac-keycloak-database:
+      image: postgres:14.1
+      container_name: gzac-keycloak-database
+      ports:
+          - "54329:5432"
+      profiles:
+        - zgw
+        - gzac
+      environment:
+          POSTGRES_USER: keycloak
+          POSTGRES_PASSWORD: keycloak
+
+  gzac-database:
+      container_name: gzac-database
+      image: postgres:14.1
+      ports:
+          - "54320:5432"
+      environment:
+          POSTGRES_USER: gzac
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: gzac
+      profiles:
+        - zgw
+        - gzac
+      volumes:
+          - gzac-database-data:/var/lib/postgres # persist data even if container shuts down
+
+  gzac-rabbitmq:
+      image: rabbitmq:3-management
+      container_name: gzac-rabbitmq
+      volumes:
+          - ./imports/gzac-rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+          - ./imports/gzac-rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+      ports:
+          - "5672:5672"
+          - "15672:15672"
+      profiles:
+        - zgw 
+        - gzac
 volumes:
   nl-portal-database-data:
+  gzac-database-data:

@@ -7,5 +7,5 @@ RUN git clone https://github.com/nl-portal/nl-portal-frontend-template.git
 WORKDIR /home/nl-portal-frontend-template
 ADD /portalfrontendtemplate/config.js /home/nl-portal-frontend-template/public/config.js
 RUN yarn install
-RUN yarn run build:production
+RUN yarn run build
 CMD yarn run start

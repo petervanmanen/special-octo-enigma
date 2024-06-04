@@ -22,7 +22,7 @@ spring:
         oauth2:
             resourceserver:
                 jwt:
-                    issuer-uri: http://nlportal.local:8080/auth/realms/nlportal
+                    issuer-uri: http://keycloak.nlportal.local:8080/auth/realms/nlportal
     liquibase:
         enabled: false
     datasource:
@@ -60,7 +60,7 @@ keycloak:
     audience: gzac-portal-token-exchange
     credentials:
         secret: ookVRUAxmEWMcosfcGR5nxeoUC4Rgwbc
-
+        
 graphql:
     packages:
         - "nl.nlportal"
@@ -152,6 +152,6 @@ nl-portal:
                     title: Belastingzaken
                     shaInKey: de14f0e3-2ff0-45eb-95a6-1cdc35ca7a00
                     shaOutKey: de14f0e3-2ff0-45eb-95a6-1cdc35ca7a00
-                    failureUrl: http://localhost:8005
-                    successUrl: http://localhost:8005
+                    failureUrl: http://localhost:3000
+                    successUrl: http://localhost:3000
 
