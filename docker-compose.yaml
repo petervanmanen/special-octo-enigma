@@ -348,6 +348,8 @@ services:
       - gzac
     depends_on:
       - gzac-database
+    ports:
+      - "8005:8080"
 
   gzac-keycloak:
       container_name: gzac-keycloak

@@ -3,6 +3,7 @@
 ### Requirements
 - [Docker Desktop](https://docs.docker.com/desktop/install/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
+Ths project requires about 20gigabyte of storage and 8 gigabyte of RAM.
 
 ### Starting up
 This repository offers two options for starting up the supporting services for NL Portal:
@@ -15,9 +16,16 @@ Execute the following command: `docker compose --profile zgw up -d`
 The following services will be started:
 | Service   |      Mapped port      |
 |----------|:-------------:|
+
+| Portal frontend | 4200 |
+| Portal backend | 8004 | 
+| GZAC frontend | 3000 | 
+| GZAC backend | 8005 |
 | NL Portal database (postgres) |  54321         |
-| Keycloak |  8082         |
-| Keycloak database (postgres) |    -   |
+| GZAC database (postgres) |  54329         |
+| Keycloak nl portal|  8080         |
+| Keycloak gzac|  8081         |
+| Keycloak nl portal database (postgres) |    -   |
 | Open Zaak | 8001 |
 | Open Zaak database (postgis) | - |
 | Open Klant | 8006 |
@@ -27,14 +35,5 @@ The following services will be started:
 | Objecttypen API | 8011 |
 | Objecttypen API database (postgres) | - |
 | Redis | - |
-| Portal frontend | 8005 |
-| Portal backend | 8004 | 
 
-### Keycloak and database only
-Execute the following command: `docker compose up -d`
-| Service   |      Mapped port      |
-|----------|:-------------:|
-| NL Portal database (postgres) |  54321         |
-| Keycloak |  8082         |
-| Keycloak database (postgres) |    -   |
 # special-octo-enigma
