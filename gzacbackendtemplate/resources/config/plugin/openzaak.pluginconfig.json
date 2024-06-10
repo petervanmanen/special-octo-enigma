@@ -1,0 +1,12 @@
+[
+    {
+        "id": "84636f3c-9275-43a5-b54c-65cd155c4887",
+        "title": "zakenapi",
+        "pluginDefinitionKey": "zakenapi",
+        "properties":
+            {
+                "url": "http://nl-portal-openzaak:8000/zaken/api/v1/",
+                "authenticationPluginConfiguration": "c7323169-086f-42cd-917c-dd625ce18ab8"
+            }
+    }
+]

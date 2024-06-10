@@ -1,5 +1,106 @@
 version: '3.9'
 services:
+  gzac-open-forms-database:
+      image: postgres:14.1
+      container_name: gzac-open-forms-database
+      profiles:
+          - zgw
+      ports:
+          - "54322:5432"
+      environment:
+          - POSTGRES_USER=${DB_USER:-openforms}
+          - POSTGRES_PASSWORD=${DB_PASSWORD:-openforms}
+      volumes:
+          - ./imports/open-formulieren:/docker-entrypoint-initdb.d
+
+  gzac-open-forms-redis:
+      image: redis:6.2.6
+      container_name: gzac-open-forms-redis
+      profiles:
+          - zgw
+
+  gzac-open-forms-web:
+      image: openformulieren/open-forms:2.0.3
+      container_name: gzac-open-forms-web
+      platform: linux/amd64
+      profiles:
+          - zgw
+      environment: &web_env
+          - CORS_ALLOW_ALL_ORIGINS=true
+          - DJANGO_SETTINGS_MODULE=openforms.conf.docker
+          - SECRET_KEY=${SECRET_KEY:-@r0w-0(&apjfde5fl6h23!vn)r1ldkp1c_d2#!$$did4z5hun4a}
+          - DJANGO_SUPERUSER_PASSWORD=admin
+          - DB_NAME=openforms
+          - DB_USER=openforms
+          - DB_PASSWORD=openforms
+          - DB_HOST=gzac-open-forms-database
+          - CACHE_DEFAULT=gzac-open-forms-redis:6379/0
+          - CACHE_AXES=gzac-open-forms-redis:6379/0
+          - ALLOWED_HOSTS=*
+          - CELERY_BROKER_URL=redis://gzac-open-forms-redis:6379/0
+          - CELERY_RESULT_BACKEND=redis://gzac-open-forms-redis:6379/0
+          - CELERY_LOGLEVEL=DEBUG
+          - OPENFORMS_LOCATION_CLIENT=${OPENFORMS_LOCATION_CLIENT:-openforms.contrib.bag.client.BAGClient}
+          # Needed for Celery Flower to match the TIME_ZONE configured in the
+          # settings used by workers and beat containers.
+          - TZ=Europe/Amsterdam
+          - TWO_FACTOR_FORCE_OTP_ADMIN=False
+          - TWO_FACTOR_PATCH_ADMIN=False
+      volumes:
+          - ./imports/open-formulieren/private_media:/app/private_media
+      ports:
+          - "8003:8000"
+      depends_on:
+          - gzac-open-forms-database
+
+  gzac-open-forms-celery:
+      image: openformulieren/open-forms:2.0.3
+      container_name: gzac-open-forms-celery
+      platform: linux/amd64
+      profiles:
+          - zgw
+      environment: *web_env
+      command: /celery_worker.sh
+      volumes:
+          - ./imports/open-formulieren/private_media:/app/private_media
+      depends_on:
+          - gzac-open-forms-database
+          - gzac-open-forms-redis
+
+  gzac-open-forms-celery-beat:
+      image: openformulieren/open-forms:2.0.3
+      container_name: gzac-open-forms-celery-beat
+      platform: linux/amd64
+      profiles:
+          - zgw
+      environment: *web_env
+      command: /celery_beat.sh
+      depends_on:
+          - gzac-open-forms-database
+          - gzac-open-forms-redis
+
+  gzac-open-forms-celery-flower:
+      image: mher/flower:0.9.7
+      container_name: gzac-open-forms-celery-flower
+      platform: linux/amd64
+      profiles:
+          - zgw
+      environment: *web_env
+      ports:
+          - "5555:5555"
+      depends_on:
+          - gzac-open-forms-redis
+          - gzac-open-forms-celery
+
+  gzac-open-forms-busybox:
+      image: busybox:1.34.1
+      container_name: gzac-open-forms-busybox
+      profiles:
+          - zgw
+      command: /bin/chown -R 1000 /private_media
+      volumes:
+          - ./imports/open-formulieren/private_media:/private_media
+
   #keycloak
 
   nl-portal-keycloak:
@@ -348,6 +449,10 @@ services:
       - gzac
     depends_on:
       - gzac-database
+    volumes:
+      - type: bind
+        source: ./gzacbackendtemplate/resources
+        target: /home/gzac-backend-template/src/main/resources/
     ports:
       - "8005:8080"
 

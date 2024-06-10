@@ -1,0 +1,12 @@
+[
+    {
+        "id": "fa0be116-c34b-440b-94dd-debcfb99b0f7",
+        "title": "objecttypenapi",
+        "pluginDefinitionKey": "objecttypenapi",
+        "properties":
+            {
+                "url": "http://localhost:8011/api/v2/",
+                "authenticationPluginConfiguration": "50b17d82-123c-4bfd-8065-1398d99f8ced"
+            }
+    }
+]

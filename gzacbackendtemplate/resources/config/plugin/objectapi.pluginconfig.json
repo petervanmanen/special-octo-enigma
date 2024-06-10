@@ -1,0 +1,12 @@
+[
+    {
+        "id": "611279e7-60bf-4404-b692-8fcaa696f592",
+        "title": "objectenapi",
+        "pluginDefinitionKey": "objectenapi",
+        "properties":
+            {
+                "url": "http://localhost:8010/api/v2/",
+                "authenticationPluginConfiguration": "50b17d82-123c-4bfd-8065-1398d99f8ced"
+            }
+    }
+]

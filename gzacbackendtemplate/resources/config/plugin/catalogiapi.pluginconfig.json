@@ -1,0 +1,12 @@
+[
+    {
+        "id": "d4d7d4d3-817c-476e-87a6-475142399d67",
+        "title": "catalogiapi",
+        "pluginDefinitionKey": "catalogiapi",
+        "properties":
+            {
+                "url": "http://localhost:8001/catalogi/api/v1/",
+                "authenticationPluginConfiguration": "c7323169-086f-42cd-917c-dd625ce18ab8"
+            }
+    }
+]

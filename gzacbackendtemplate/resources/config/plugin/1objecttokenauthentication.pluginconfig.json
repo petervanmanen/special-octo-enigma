@@ -1,0 +1,11 @@
+[
+    {
+        "id": "50b17d82-123c-4bfd-8065-1398d99f8ced",
+        "title": "objecttokenauthentication",
+        "pluginDefinitionKey": "objecttokenauthentication",
+        "properties":
+            {
+                "token": "182c13e2209161852c53cef53a879f7a2f923430"
+            }
+    }
+]

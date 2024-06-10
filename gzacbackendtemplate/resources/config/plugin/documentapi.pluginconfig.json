@@ -1,0 +1,13 @@
+[
+    {
+        "id": "23738c3b-e856-41d9-87a1-2fd63021e233",
+        "title": "documentenapi",
+        "pluginDefinitionKey": "documentenapi",
+        "properties":
+            {
+                "url": "http://localhost:8001/documenten/api/v1/",
+                "bronorganisatie": "002564440",
+                "authenticationPluginConfiguration": "c7323169-086f-42cd-917c-dd625ce18ab8"
+            }
+    }
+]
